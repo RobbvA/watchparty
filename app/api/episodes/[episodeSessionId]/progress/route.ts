@@ -1,6 +1,23 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 
+export async function GET(
+  request: Request,
+  { params }: { params: Promise<{ episodeSessionId: string }> },
+) {
+  const { episodeSessionId } = await params;
+  const { searchParams } = new URL(request.url);
+  const username = searchParams.get("username");
+
+  if (!username) return NextResponse.json(null);
+
+  const progress = await prisma.userProgress.findFirst({
+    where: { episodeSessionId, username },
+  });
+
+  return NextResponse.json(progress);
+}
+
 export async function POST(
   request: Request,
   { params }: { params: Promise<{ episodeSessionId: string }> },

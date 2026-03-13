@@ -8,7 +8,7 @@ type Post = {
   username: string;
   body: string;
   timestampSec: number;
-  createdAt: string;
+  createdAt: Date | string;
 };
 
 type Props = {
@@ -35,6 +35,20 @@ export default function EpisodeClient({ party, episode, initialPosts }: Props) {
   }
   const [progressSec, setProgressSec] = useState(0);
   const [savedProgress, setSavedProgress] = useState<number | null>(null);
+
+  useEffect(() => {
+    const savedUsername = localStorage.getItem("watchparty_username");
+    if (!savedUsername) return;
+
+    fetch(`/api/episodes/${episode.id}/progress?username=${savedUsername}`)
+      .then((res) => res.json())
+      .then((data) => {
+        if (data?.progressSec !== undefined) {
+          setProgressSec(data.progressSec);
+          setSavedProgress(data.progressSec);
+        }
+      });
+  }, [episode.id]);
   const [posts, setPosts] = useState<Post[]>(initialPosts);
   const [newPost, setNewPost] = useState("");
 
@@ -158,16 +172,29 @@ export default function EpisodeClient({ party, episode, initialPosts }: Props) {
           return (
             <li key={post.id} className="border rounded p-3">
               {isSpoiler ? (
-                <p className="text-gray-400 italic">
-                  🚫 Spoiler at {formatTime(post.timestampSec)}
-                </p>
+                <div className="flex items-center gap-2 bg-gray-100 border border-gray-200 rounded p-3">
+                  <span className="text-lg">🚫</span>
+                  <div>
+                    <p className="text-sm font-semibold text-gray-500">
+                      Spoiler ahead
+                    </p>
+                    <p className="text-xs text-gray-400">
+                      Posted at {formatTime(post.timestampSec)} — catch up to
+                      reveal
+                    </p>
+                  </div>
+                </div>
               ) : (
-                <>
-                  <p className="text-xs text-gray-400 mb-1">
-                    {post.username} · {formatTime(post.timestampSec)}
+                <div className="flex flex-col gap-1">
+                  <p className="text-xs text-gray-400">
+                    <span className="font-semibold text-gray-600">
+                      {post.username}
+                    </span>
+                    {" · "}
+                    {formatTime(post.timestampSec)}
                   </p>
-                  <p>{post.body}</p>
-                </>
+                  <p className="text-gray-800">{post.body}</p>
+                </div>
               )}
             </li>
           );
