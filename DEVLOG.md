@@ -1,0 +1,91 @@
+# WatchParty — Development Log
+
+This document tracks the development progress of WatchParty milestone by milestone.
+
+---
+
+## Milestone 1 — Foundation
+
+**Goal:** Set up the project and basic party creation flow.
+
+### What was built
+
+- Next.js 16 project with TypeScript and Tailwind CSS
+- PostgreSQL database connection via Prisma 7
+- `Party` data model
+- Home page with link to Create Party
+- Create Party page with form
+- Party detail page showing stored party data
+- API route: `POST /api/parties`
+
+### Key decisions
+
+- Used Prisma 7 which requires a driver adapter (`@prisma/adapter-pg`) instead of a connection URL in the schema
+- Used `cuid` for all IDs
+
+### Result
+
+A user can create a party and be redirected to a party detail page showing the stored data.
+
+---
+
+## Milestone 2 — Episodes
+
+**Goal:** Add episode structure inside a party.
+
+### What was built
+
+- `EpisodeSession` data model linked to `Party`
+- Episode list on the party detail page
+- Current episode highlighted visually
+- Episode links to discussion route
+- Host control dropdown to change current episode
+- API route: `PATCH /api/parties/[partyId]`
+- Seed data: each party gets 3 episodes automatically
+
+### Key decisions
+
+- Kept episode discussion page as a separate route for scalability
+- Used `router.refresh()` after updating current episode to avoid full page reload
+
+### Result
+
+A user can browse episodes inside a party, see which episode is current, change the current episode, and open an episode discussion page.
+
+---
+
+## Milestone 3 — Reactions and Spoiler Filtering
+
+**Goal:** Add the core episode interaction system.
+
+### What was built
+
+- `Post` data model — reactions tied to a timestamp in seconds
+- `UserProgress` data model — tracks how far a user has watched per episode
+- API route: `POST /api/episodes/[episodeSessionId]/progress`
+- API route: `GET /api/episodes/[episodeSessionId]/posts`
+- API route: `POST /api/episodes/[episodeSessionId]/posts`
+- `EpisodeClient` component with:
+  - Username input
+  - Progress slider (0 to 60 minutes)
+  - Save progress button
+  - Reaction form tied to saved progress
+  - Reaction feed ordered by timestamp
+  - Spoiler filtering: reactions beyond user progress are hidden
+- Seed data: Episode 1 of "Anime Night" has 3 posts at different timestamps
+
+### Key decisions
+
+- Split episode page into a server component (data fetching) and a client component (interactivity)
+- Spoiler filtering is done client-side based on saved progress
+- No authentication — username is entered manually for this MVP
+
+### Result
+
+A user can set their watch progress, post reactions tied to their timestamp, and read reactions from others with spoilers automatically hidden.
+
+---
+
+## Up Next — Milestone 4
+
+TBD

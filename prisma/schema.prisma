@@ -1,0 +1,55 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Party {
+  id                   String           @id @default(cuid())
+  name                 String
+  showTitle            String
+  hostUsername         String
+  watchLink            String?
+  scheduledAt          DateTime?
+  currentEpisodeNumber Int              @default(1)
+  createdAt            DateTime         @default(now())
+  episodes             EpisodeSession[]
+  posts                Post[]
+  userProgresses       UserProgress[]
+}
+
+model EpisodeSession {
+  id            String         @id @default(cuid())
+  partyId       String
+  episodeNumber Int
+  episodeTitle  String?
+  createdAt     DateTime       @default(now())
+  party         Party          @relation(fields: [partyId], references: [id])
+  posts         Post[]
+  userProgresses UserProgress[]
+}
+
+model Post {
+  id               String         @id @default(cuid())
+  partyId          String
+  episodeSessionId String
+  username         String
+  body             String
+  timestampSec     Int
+  createdAt        DateTime       @default(now())
+  party            Party          @relation(fields: [partyId], references: [id])
+  episodeSession   EpisodeSession @relation(fields: [episodeSessionId], references: [id])
+}
+
+model UserProgress {
+  id               String         @id @default(cuid())
+  partyId          String
+  episodeSessionId String
+  username         String
+  progressSec      Int
+  updatedAt        DateTime       @updatedAt
+  party            Party          @relation(fields: [partyId], references: [id])
+  episodeSession   EpisodeSession @relation(fields: [episodeSessionId], references: [id])
+}
