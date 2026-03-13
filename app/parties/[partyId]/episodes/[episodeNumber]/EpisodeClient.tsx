@@ -25,6 +25,11 @@ function formatTime(sec: number) {
 
 export default function EpisodeClient({ party, episode, initialPosts }: Props) {
   const [username, setUsername] = useState("");
+
+  function handleUsernameChange(value: string) {
+    setUsername(value);
+    localStorage.setItem("watchparty_username", value);
+  }
   const [progressSec, setProgressSec] = useState(0);
   const [savedProgress, setSavedProgress] = useState<number | null>(null);
   const [posts, setPosts] = useState<Post[]>(initialPosts);
@@ -91,7 +96,7 @@ export default function EpisodeClient({ party, episode, initialPosts }: Props) {
           className="border p-2 rounded w-full mt-1"
           placeholder="e.g. alice"
           value={username}
-          onChange={(e) => setUsername(e.target.value)}
+          onChange={(e) => handleUsernameChange(e.target.value)}
         />
       </div>
 
