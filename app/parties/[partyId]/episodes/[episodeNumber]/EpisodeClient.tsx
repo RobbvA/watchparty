@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 
 type Post = {
@@ -24,7 +24,10 @@ function formatTime(sec: number) {
 }
 
 export default function EpisodeClient({ party, episode, initialPosts }: Props) {
-  const [username, setUsername] = useState("");
+  const [username, setUsername] = useState(() => {
+    if (typeof window === "undefined") return "";
+    return localStorage.getItem("watchparty_username") ?? "";
+  });
 
   function handleUsernameChange(value: string) {
     setUsername(value);
