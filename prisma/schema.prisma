@@ -20,6 +20,7 @@ model Party {
   episodes             EpisodeSession[]
   posts                Post[]
   userProgresses       UserProgress[]
+  messages   PartyMessage[]
 }
 model EpisodeSession {
   id            String         @id @default(cuid())
@@ -53,4 +54,12 @@ model UserProgress {
   updatedAt        DateTime       @updatedAt
   party            Party          @relation(fields: [partyId], references: [id])
   episodeSession   EpisodeSession @relation(fields: [episodeSessionId], references: [id])
+}
+model PartyMessage {
+  id        String   @id @default(cuid())
+  partyId   String
+  username  String
+  body      String
+  createdAt DateTime @default(now())
+  party     Party    @relation(fields: [partyId], references: [id])
 }
