@@ -35,7 +35,6 @@ export default async function PartyPage({
       </div>
 
       <div className="max-w-lg mx-auto px-6 py-6 flex flex-col gap-6">
-
         <section className="bg-white rounded-lg border p-4">
           <h2 className="text-sm font-bold text-gray-700 mb-3">Party Status</h2>
 
@@ -65,7 +64,7 @@ export default async function PartyPage({
           )}
 
           {party.watchLink && (
-            
+            <a
               href={party.watchLink}
               target="_blank"
               rel="noopener noreferrer"
@@ -127,7 +126,6 @@ export default async function PartyPage({
 
         {/* Chat */}
         <PartyChat partyId={partyId} />
-
       </div>
     </main>
   );
