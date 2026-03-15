@@ -33,8 +33,13 @@ export default function EpisodeClient({ party, episode, initialPosts }: Props) {
     setUsername(value);
     localStorage.setItem("watchparty_username", value);
   }
+
   const [progressSec, setProgressSec] = useState(0);
   const [savedProgress, setSavedProgress] = useState<number | null>(null);
+  const [progressStatus, setProgressStatus] = useState<"idle" | "saving" | "saved">("idle");
+  const [postStatus, setPostStatus] = useState<"idle" | "posting" | "error">("idle");
+  const [posts, setPosts] = useState<Post[]>(initialPosts);
+  const [newPost, setNewPost] = useState("");
 
   useEffect(() => {
     const savedUsername = localStorage.getItem("watchparty_username");
@@ -49,44 +54,44 @@ export default function EpisodeClient({ party, episode, initialPosts }: Props) {
         }
       });
   }, [episode.id]);
-  const [posts, setPosts] = useState<Post[]>(initialPosts);
-  const [newPost, setNewPost] = useState("");
 
   async function handleSaveProgress() {
     if (!username) return alert("Enter a username first.");
+    setProgressStatus("saving");
     await fetch(`/api/episodes/${episode.id}/progress`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        partyId: party.id,
-        username,
-        progressSec,
-      }),
+      body: JSON.stringify({ partyId: party.id, username, progressSec }),
     });
     setSavedProgress(progressSec);
+    setProgressStatus("saved");
   }
 
   async function handlePostSubmit() {
     if (!username) return alert("Enter a username first.");
     if (!newPost.trim()) return;
     if (savedProgress === null) return alert("Save your progress first.");
-
-    const res = await fetch(`/api/episodes/${episode.id}/posts`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        partyId: party.id,
-        username,
-        body: newPost,
-        timestampSec: savedProgress,
-      }),
-    });
-
-    const created = await res.json();
-    setPosts((prev) =>
-      [...prev, created].sort((a, b) => a.timestampSec - b.timestampSec),
-    );
-    setNewPost("");
+    setPostStatus("posting");
+    try {
+      const res = await fetch(`/api/episodes/${episode.id}/posts`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          partyId: party.id,
+          username,
+          body: newPost,
+          timestampSec: savedProgress,
+        }),
+      });
+      const created = await res.json();
+      setPosts((prev) =>
+        [...prev, created].sort((a, b) => a.timestampSec - b.timestampSec)
+      );
+      setNewPost("");
+      setPostStatus("idle");
+    } catch {
+      setPostStatus("error");
+    }
   }
 
   return (
@@ -132,13 +137,14 @@ export default function EpisodeClient({ party, episode, initialPosts }: Props) {
         />
         <button
           onClick={handleSaveProgress}
-          className="mt-2 bg-black text-white px-4 py-2 rounded text-sm"
+          disabled={progressStatus === "saving"}
+          className="mt-2 bg-black text-white px-4 py-2 rounded text-sm disabled:opacity-50"
         >
-          Save Progress
+          {progressStatus === "saving" ? "Saving..." : "Save Progress"}
         </button>
-        {savedProgress !== null && (
+        {progressStatus === "saved" && (
           <p className="text-xs text-green-600 mt-1">
-            Progress saved at {formatTime(savedProgress)}
+            ✅ Progress saved at {formatTime(savedProgress!)}
           </p>
         )}
       </div>
@@ -157,10 +163,16 @@ export default function EpisodeClient({ party, episode, initialPosts }: Props) {
         />
         <button
           onClick={handlePostSubmit}
-          className="mt-2 bg-black text-white px-4 py-2 rounded text-sm"
+          disabled={postStatus === "posting"}
+          className="mt-2 bg-black text-white px-4 py-2 rounded text-sm disabled:opacity-50"
         >
-          Post
+          {postStatus === "posting" ? "Posting..." : "Post"}
         </button>
+        {postStatus === "error" && (
+          <p className="text-xs text-red-500 mt-1">
+            Something went wrong. Try again.
+          </p>
+        )}
       </div>
 
       {/* Reaction feed */}
@@ -179,8 +191,7 @@ export default function EpisodeClient({ party, episode, initialPosts }: Props) {
                       Spoiler ahead
                     </p>
                     <p className="text-xs text-gray-400">
-                      Posted at {formatTime(post.timestampSec)} — catch up to
-                      reveal
+                      Posted at {formatTime(post.timestampSec)} — catch up to reveal
                     </p>
                   </div>
                 </div>
