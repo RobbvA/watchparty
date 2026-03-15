@@ -7,12 +7,17 @@ const adapter = new PrismaPg({
 const prisma = new PrismaClient({ adapter });
 
 async function main() {
+  // Party 1 - upcoming in 1 hour
   const party1 = await prisma.party.create({
     data: {
       name: "Anime Night",
       showTitle: "Attack on Titan",
       hostUsername: "bob",
       currentEpisodeNumber: 1,
+      watchLink: "https://crunchyroll.com",
+      scheduledAt: new Date(Date.now() + 60 * 60 * 1000),
+      liveWindowMinutes: 120,
+      status: "upcoming",
       episodes: {
         create: [
           { episodeNumber: 1, episodeTitle: "To You, 2000 Years Later" },
@@ -52,12 +57,17 @@ async function main() {
     ],
   });
 
+  // Party 2 - live now
   await prisma.party.create({
     data: {
       name: "Weekend Binge",
       showTitle: "Breaking Bad",
       hostUsername: "alice",
       currentEpisodeNumber: 2,
+      watchLink: "https://netflix.com",
+      scheduledAt: new Date(Date.now() - 30 * 60 * 1000),
+      liveWindowMinutes: 120,
+      status: "live",
       episodes: {
         create: [
           { episodeNumber: 1, episodeTitle: "Pilot" },

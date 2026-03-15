@@ -13,13 +13,14 @@ model Party {
   hostUsername         String
   watchLink            String?
   scheduledAt          DateTime?
+  liveWindowMinutes    Int?             @default(120)
+  status               String           @default("upcoming")
   currentEpisodeNumber Int              @default(1)
   createdAt            DateTime         @default(now())
   episodes             EpisodeSession[]
   posts                Post[]
   userProgresses       UserProgress[]
 }
-
 model EpisodeSession {
   id            String         @id @default(cuid())
   partyId       String
