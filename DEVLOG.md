@@ -86,6 +86,59 @@ A user can set their watch progress, post reactions tied to their timestamp, and
 
 ---
 
-## Up Next — Milestone 4
+## Milestone 4 — Episode UX Improvements
+
+**Goal:** Improve the episode discussion experience without adding major new systems.
+
+### What was built
+
+- Username persisted in localStorage and auto-loaded on page visit
+- User progress auto-loaded from database on page load
+- Improved spoiler card UI with styled grey box and clear messaging
+- Loading and success states for Save Progress and Post buttons
+- Improved episode page layout with card-based sections and gray background
+- Empty state for reaction feed
+
+### Key decisions
+
+- Used lazy `useState` initializer instead of `useEffect` to read from localStorage to avoid React cascading render warning
+- Progress auto-load uses a `useEffect` that fetches from the API on mount
+- Status feedback kept inline rather than using toast notifications for simplicity
+
+### Result
+
+The episode discussion page now feels polished. Username and progress are remembered between visits. User actions give clear visual feedback.
+
+---
+
+## Milestone 5 — Live Watch Party Scheduling
+
+**Goal:** Introduce scheduling foundation for live watch events.
+
+### What was built
+
+- Extended `Party` model with `watchLink`, `scheduledAt`, `liveWindowMinutes`, and `status` fields
+- Status calculation utility in `lib/partyStatus.ts`
+- Party page now shows:
+  - 🔴 LIVE NOW indicator with pulsing dot
+  - Countdown timer (Starts in Xh Xm) for upcoming parties
+  - Watch Party Ended state for past parties
+  - Watch Now button linking to external streaming platform
+- Create Party form updated with watch link and scheduled time fields
+- Seed data updated with one upcoming and one live party
+
+### Key decisions
+
+- Status is calculated at render time from `scheduledAt` and `liveWindowMinutes` rather than stored as a fixed value
+- Status utility kept in `lib/` so it can be reused across pages
+- Live window defaults to 120 minutes
+
+### Result
+
+A user can schedule a watch party with a time and watch link. The party page shows the correct live status and a direct link to the streaming platform.
+
+---
+
+## Up Next — Milestone 6
 
 TBD
