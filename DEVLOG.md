@@ -139,6 +139,37 @@ A user can schedule a watch party with a time and watch link. The party page sho
 
 ---
 
-## Up Next — Milestone 6
+## Milestone 6 — Party Chat
+
+**Goal:** Introduce a basic persistent party chat system.
+
+### What was built
+
+- `PartyMessage` model with `partyId`, `username`, `body`, `createdAt`
+- API route: `GET /api/parties/[partyId]/messages` — returns latest 100 messages
+- API route: `POST /api/parties/[partyId]/messages` — creates a new message
+- `PartyChat` component with:
+  - Message list ordered by time
+  - Username pre-filled from localStorage
+  - Send with button or Enter key
+  - Auto-scroll to latest message
+  - Loading and error states
+  - Empty state: "No messages yet. Say hello!"
+- Party page updated with chat section at the bottom
+
+### Key decisions
+
+- Chat is separate from episode reactions — it is general party conversation not tied to timestamps
+- Username shared with episode reactions via localStorage
+- No realtime updates — messages load on mount and update on send
+- Limited to latest 100 messages per party
+
+### Result
+
+Users can send and read chat messages on the party page. Messages persist in the database and survive page refreshes.
+
+---
+
+## Up Next — Milestone 7
 
 TBD
