@@ -25,6 +25,16 @@ export default function PartyChat({
   const [status, setStatus] = useState<"idle" | "sending" | "error">("idle");
   const bottomRef = useRef<HTMLDivElement>(null);
 
+  const activeUsers = new Set(
+    messages
+      .filter((m) => {
+        const messageAge =
+          new Date().getTime() - new Date(m.createdAt).getTime();
+        return messageAge < 10 * 60 * 1000;
+      })
+      .map((m) => m.username),
+  ).size;
+
   useEffect(() => {
     function fetchMessages() {
       fetch(`/api/parties/${partyId}/messages`)
@@ -83,7 +93,13 @@ export default function PartyChat({
         <h2 className="text-sm font-bold text-gray-700">Party Chat</h2>
       )}
 
-      {/* Username */}
+      {activeUsers > 0 && (
+        <p className="text-xs text-gray-400">
+          {activeUsers} {activeUsers === 1 ? "person" : "people"} active
+          recently
+        </p>
+      )}
+
       <input
         className="border p-2 rounded text-sm w-full"
         placeholder="Your username"
@@ -91,7 +107,6 @@ export default function PartyChat({
         onChange={(e) => handleUsernameChange(e.target.value)}
       />
 
-      {/* Message list */}
       <div className="flex flex-col gap-2 max-h-64 overflow-y-auto border rounded p-2 bg-gray-50">
         {messages.length === 0 ? (
           <p className="text-xs text-gray-400 text-center py-4">
@@ -113,7 +128,6 @@ export default function PartyChat({
         <div ref={bottomRef} />
       </div>
 
-      {/* Input */}
       <div className="flex gap-2">
         <input
           className="border p-2 rounded text-sm flex-1"
