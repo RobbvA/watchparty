@@ -20,9 +20,15 @@ export default function PartyChat({ partyId }: { partyId: string }) {
   const bottomRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    fetch(`/api/parties/${partyId}/messages`)
-      .then((res) => res.json())
-      .then((data) => setMessages(data));
+    function fetchMessages() {
+      fetch(`/api/parties/${partyId}/messages`)
+        .then((res) => res.json())
+        .then((data) => setMessages(data));
+    }
+
+    fetchMessages();
+    const interval = setInterval(fetchMessages, 8000);
+    return () => clearInterval(interval);
   }, [partyId]);
 
   useEffect(() => {
