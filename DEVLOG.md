@@ -170,6 +170,35 @@ Users can send and read chat messages on the party page. Messages persist in the
 
 ---
 
-## Up Next — Milestone 7
+## Milestone 7 — Live Feel and PiP Layout
+
+**Goal:** Make the party feel more live and usable while watching a show in Picture-in-Picture.
+
+### What was built
+
+- Chat auto-refresh every 8 seconds using polling
+- Live Party Chat label with pulsing red dot when party status is live
+- Active recently indicator showing unique usernames from last 20 messages
+- PiP-friendly party page layout:
+  - Compact header with name, status and watch button in one row
+  - Chat moved to the top of the page
+  - Episode list and host controls moved below chat
+  - Party info collapsed to the bottom
+  - Tighter spacing throughout
+
+### Key decisions
+
+- Used simple polling instead of websockets to keep infrastructure lightweight
+- Chat placed at top of page as it is the most important feature during a live watch
+- Active user count based on last 20 messages to avoid time calculation issues during render
+- Interval cleaned up on component unmount to avoid memory leaks
+
+### Result
+
+The party page now feels like a companion app. Chat auto-updates, the live status is visible at a glance, and the layout works well alongside a PiP video window.
+
+---
+
+## Up Next — Milestone 8
 
 TBD

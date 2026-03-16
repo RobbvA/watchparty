@@ -26,58 +26,90 @@ export default async function PartyPage({
 
   return (
     <main className="min-h-screen bg-gray-50">
-      <div className="bg-white border-b px-6 py-4">
-        <Link href="/" className="text-sm text-gray-400 hover:text-gray-600">
-          ← Home
-        </Link>
-        <h1 className="text-2xl font-bold mt-1">{party.name}</h1>
-        <p className="text-sm text-gray-500">{party.showTitle}</p>
-      </div>
+      {/* Compact header */}
+      <div className="bg-white border-b px-4 py-3 flex items-center justify-between">
+        <div>
+          <Link href="/" className="text-xs text-gray-400 hover:text-gray-600">
+            ← Home
+          </Link>
+          <h1 className="text-lg font-bold leading-tight">{party.name}</h1>
+          <p className="text-xs text-gray-500">{party.showTitle}</p>
+        </div>
 
-      <div className="max-w-lg mx-auto px-6 py-6 flex flex-col gap-6">
-        <section className="bg-white rounded-lg border p-4">
-          <h2 className="text-sm font-bold text-gray-700 mb-3">Party Status</h2>
-
+        {/* Inline status badge */}
+        <div className="flex flex-col items-end gap-1">
           {status === "live" && (
-            <div className="flex items-center gap-2">
-              <span className="w-3 h-3 bg-red-500 rounded-full animate-pulse" />
-              <span className="text-red-600 font-bold text-lg">LIVE NOW</span>
+            <div className="flex items-center gap-1">
+              <span className="w-2 h-2 bg-red-500 rounded-full animate-pulse" />
+              <span className="text-xs font-bold text-red-600">LIVE</span>
             </div>
           )}
-
           {status === "upcoming" && timeUntil && (
-            <div className="flex items-center gap-2 text-gray-600">
-              <span className="text-xl">🕐</span>
-              <span className="font-semibold">Starts in {timeUntil}</span>
-            </div>
+            <span className="text-xs text-gray-500">🕐 {timeUntil}</span>
           )}
-
-          {status === "upcoming" && !timeUntil && (
-            <p className="text-gray-500 text-sm">Not scheduled yet</p>
-          )}
-
           {status === "ended" && (
-            <div className="flex items-center gap-2 text-gray-400">
-              <span className="text-xl">✅</span>
-              <span className="font-semibold">Watch Party Ended</span>
-            </div>
+            <span className="text-xs text-gray-400">✅ Ended</span>
           )}
-
           {party.watchLink && (
             <a
               href={party.watchLink}
               target="_blank"
               rel="noopener noreferrer"
-              className="mt-4 block w-full text-center bg-black text-white py-2 rounded text-sm font-semibold"
+              className="text-xs bg-black text-white px-2 py-1 rounded font-semibold"
             >
-              Watch Now →
+              Watch →
             </a>
           )}
+        </div>
+      </div>
+
+      <div className="max-w-lg mx-auto px-4 py-4 flex flex-col gap-4">
+        {/* Chat first - most important during live watch */}
+        <PartyChat partyId={partyId} isLive={status === "live"} />
+
+        {/* Episode list */}
+        <section>
+          <h2 className="text-xs font-bold text-gray-500 uppercase tracking-wide mb-2">
+            Episodes
+          </h2>
+          <ul className="flex flex-col gap-1">
+            {party.episodes.map((ep) => (
+              <li key={ep.id}>
+                <Link
+                  href={`/parties/${partyId}/episodes/${ep.episodeNumber}`}
+                  className={`block px-3 py-2 rounded-lg border text-sm ${
+                    ep.episodeNumber === party.currentEpisodeNumber
+                      ? "bg-black text-white font-bold"
+                      : "bg-white text-gray-800 hover:bg-gray-100"
+                  }`}
+                >
+                  Ep {ep.episodeNumber}
+                  {ep.episodeTitle && ` — ${ep.episodeTitle}`}
+                  {ep.episodeNumber === party.currentEpisodeNumber && " 👈"}
+                </Link>
+              </li>
+            ))}
+          </ul>
         </section>
 
-        <section className="bg-white rounded-lg border p-4">
-          <h2 className="text-sm font-bold text-gray-700 mb-3">Party Info</h2>
-          <div className="flex flex-col gap-2 text-sm text-gray-600">
+        {/* Host controls */}
+        <section className="bg-white rounded-lg border p-3">
+          <h2 className="text-xs font-bold text-gray-500 uppercase tracking-wide mb-2">
+            Host Controls
+          </h2>
+          <EpisodeDropdown
+            partyId={partyId}
+            episodes={party.episodes}
+            currentEpisodeNumber={party.currentEpisodeNumber}
+          />
+        </section>
+
+        {/* Party info - collapsed to bottom */}
+        <section className="bg-white rounded-lg border p-3">
+          <h2 className="text-xs font-bold text-gray-500 uppercase tracking-wide mb-2">
+            Party Info
+          </h2>
+          <div className="flex flex-col gap-1 text-sm text-gray-600">
             <p>
               <span className="font-semibold">Host:</span> {party.hostUsername}
             </p>
@@ -89,43 +121,6 @@ export default async function PartyPage({
             )}
           </div>
         </section>
-
-        <section className="bg-white rounded-lg border p-4">
-          <h2 className="text-sm font-bold text-gray-700 mb-3">
-            Host Controls
-          </h2>
-          <EpisodeDropdown
-            partyId={partyId}
-            episodes={party.episodes}
-            currentEpisodeNumber={party.currentEpisodeNumber}
-          />
-        </section>
-
-        <section>
-          <h2 className="text-sm font-bold text-gray-700 mb-3">Episodes</h2>
-          <ul className="flex flex-col gap-2">
-            {party.episodes.map((ep) => (
-              <li key={ep.id}>
-                <Link
-                  href={`/parties/${partyId}/episodes/${ep.episodeNumber}`}
-                  className={`block p-3 rounded-lg border text-sm ${
-                    ep.episodeNumber === party.currentEpisodeNumber
-                      ? "bg-black text-white font-bold"
-                      : "bg-white text-gray-800 hover:bg-gray-100"
-                  }`}
-                >
-                  Episode {ep.episodeNumber}
-                  {ep.episodeTitle && ` — ${ep.episodeTitle}`}
-                  {ep.episodeNumber === party.currentEpisodeNumber &&
-                    " 👈 current"}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </section>
-
-        {/* Chat */}
-        <PartyChat partyId={partyId} isLive={status === "live"} />
       </div>
     </main>
   );
