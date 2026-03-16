@@ -125,7 +125,7 @@ export default async function PartyPage({
         </section>
 
         {/* Chat */}
-        <PartyChat partyId={partyId} />
+        <PartyChat partyId={partyId} isLive={status === "live"} />
       </div>
     </main>
   );

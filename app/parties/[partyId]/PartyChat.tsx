@@ -9,7 +9,13 @@ type Message = {
   createdAt: string;
 };
 
-export default function PartyChat({ partyId }: { partyId: string }) {
+export default function PartyChat({
+  partyId,
+  isLive,
+}: {
+  partyId: string;
+  isLive: boolean;
+}) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [username, setUsername] = useState(() => {
     if (typeof window === "undefined") return "";
@@ -68,7 +74,14 @@ export default function PartyChat({ partyId }: { partyId: string }) {
 
   return (
     <section className="bg-white rounded-lg border p-4 flex flex-col gap-3">
-      <h2 className="text-sm font-bold text-gray-700">Party Chat</h2>
+      {isLive ? (
+        <div className="flex items-center gap-2">
+          <span className="w-2 h-2 bg-red-500 rounded-full animate-pulse" />
+          <h2 className="text-sm font-bold text-red-600">Live Party Chat</h2>
+        </div>
+      ) : (
+        <h2 className="text-sm font-bold text-gray-700">Party Chat</h2>
+      )}
 
       {/* Username */}
       <input
