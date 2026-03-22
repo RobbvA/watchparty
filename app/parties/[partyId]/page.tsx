@@ -45,44 +45,70 @@ export default async function PartyPage({
 
   return (
     <main className="min-h-screen bg-gray-50">
-      {/* Compact header */}
-      <div className="bg-white border-b px-4 py-3 flex items-center justify-between">
-        <div>
-          <Link href="/" className="text-xs text-gray-400 hover:text-gray-600">
-            ← Home
-          </Link>
-          <h1 className="text-lg font-bold leading-tight">{party.name}</h1>
-          <p className="text-xs text-gray-500">{party.showTitle}</p>
-        </div>
+      {/* Header */}
+      <div
+        className={`border-b px-4 py-4 ${status === "live" ? "bg-red-50" : "bg-white"}`}
+      >
+        <Link href="/" className="text-xs text-gray-400 hover:text-gray-600">
+          ← Home
+        </Link>
 
-        {/* Inline status badge */}
-        <div className="flex flex-col items-end gap-1">
-          {status === "live" && (
-            <div className="flex items-center gap-1">
-              <span className="w-2 h-2 bg-red-500 rounded-full animate-pulse" />
-              <span className="text-xs font-bold text-red-600">LIVE</span>
-            </div>
-          )}
-          {status === "upcoming" && timeUntil && (
-            <span className="text-xs text-gray-500">🕐 {timeUntil}</span>
-          )}
-          {status === "ended" && (
-            <span className="text-xs text-gray-400">✅ Ended</span>
-          )}
-          {party.watchLink && (
-            <a
-              href={party.watchLink}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-xs bg-black text-white px-2 py-1 rounded font-semibold"
-            >
-              Watch →
-            </a>
-          )}
+        <div className="flex items-start justify-between mt-1">
+          <div>
+            <h1 className="text-lg font-bold leading-tight">{party.name}</h1>
+            <p className="text-xs text-gray-500">{party.showTitle}</p>
+            <p className="text-xs text-gray-400 mt-0.5">
+              Now watching: Episode {party.currentEpisodeNumber}
+            </p>
+          </div>
+
+          <div className="flex flex-col items-end gap-2">
+            {status === "live" && (
+              <div className="flex items-center gap-1">
+                <span className="w-2 h-2 bg-red-500 rounded-full animate-pulse" />
+                <span className="text-xs font-bold text-red-600">LIVE NOW</span>
+              </div>
+            )}
+            {status === "upcoming" && timeUntil && (
+              <span className="text-xs text-gray-500">🕐 {timeUntil}</span>
+            )}
+            {status === "ended" && (
+              <span className="text-xs text-gray-400">✅ Ended</span>
+            )}
+            {watchingNow > 0 && (
+              <div className="flex items-center gap-1">
+                <span className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse" />
+                <span className="text-xs text-green-600 font-semibold">
+                  {watchingNow} watching
+                </span>
+              </div>
+            )}
+            {party.watchLink && (
+              <a
+                href={party.watchLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-xs bg-black text-white px-3 py-1.5 rounded font-semibold"
+              >
+                Watch Now →
+              </a>
+            )}
+          </div>
         </div>
       </div>
 
       <div className="max-w-lg mx-auto px-4 py-4 flex flex-col gap-4">
+        {/* Watching now */}
+        {watchingNow > 0 && (
+          <div className="flex items-center gap-2 bg-white rounded-lg border px-4 py-3">
+            <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
+            <p className="text-sm font-semibold text-gray-700">
+              {watchingNow} {watchingNow === 1 ? "person" : "people"} watching
+              now
+            </p>
+          </div>
+        )}
+
         {/* Chat first - most important during live watch */}
         <PartyChat partyId={partyId} isLive={status === "live"} />
 
