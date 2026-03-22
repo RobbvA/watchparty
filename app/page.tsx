@@ -1,5 +1,4 @@
 import { prisma } from "@/lib/prisma";
-import Link from "next/link";
 import { calculatePartyStatus } from "@/lib/partyStatus";
 import PartyCard from "./components/PartyCard";
 
@@ -51,6 +50,40 @@ export default async function Home() {
             </ul>
           )}
         </section>
+
+        {/* Upcoming */}
+        <section>
+          <h2 className="text-sm font-bold text-gray-700 uppercase tracking-wide mb-3">
+            Upcoming
+          </h2>
+          {upcomingParties.length === 0 ? (
+            <p className="text-sm text-gray-400">No upcoming parties.</p>
+          ) : (
+            <ul className="flex flex-col gap-3">
+              {upcomingParties.map((p) => (
+                <li key={p.id}>
+                  <PartyCard party={p} />
+                </li>
+              ))}
+            </ul>
+          )}
+        </section>
+
+        {/* Recently Ended */}
+        {endedParties.length > 0 && (
+          <section>
+            <h2 className="text-sm font-bold text-gray-400 uppercase tracking-wide mb-3">
+              Recently Ended
+            </h2>
+            <ul className="flex flex-col gap-3">
+              {endedParties.map((p) => (
+                <li key={p.id}>
+                  <PartyCard party={p} />
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
       </div>
     </main>
   );
