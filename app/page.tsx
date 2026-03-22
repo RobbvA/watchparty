@@ -37,7 +37,22 @@ export default async function Home() {
           + Create
         </Link>
       </div>
-
+      {/* Global empty state */}
+      {parties.length === 0 && (
+        <div className="text-center py-16 flex flex-col items-center gap-3">
+          <p className="text-4xl">🎬</p>
+          <p className="text-gray-600 font-semibold">No watch parties yet.</p>
+          <p className="text-sm text-gray-400">
+            Create one and invite your friends!
+          </p>
+          <Link
+            href="/create-party"
+            className="mt-2 bg-black text-white px-6 py-2 rounded text-sm font-semibold"
+          >
+            Create Watch Party
+          </Link>
+        </div>
+      )}
       <div className="max-w-lg mx-auto px-6 py-6 flex flex-col gap-8">
         {/* Live Now */}
         <section>
