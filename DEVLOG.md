@@ -199,6 +199,40 @@ The party page now feels like a companion app. Chat auto-updates, the live statu
 
 ---
 
-## Up Next — Milestone 8
+## Milestone 8 — Home Page and Party Discovery
+
+**Goal:** Improve the entry experience so new users can immediately discover and join parties.
+
+### What was built
+
+- Home page redesigned with three sections:
+  - 🔴 Live Now
+  - Upcoming
+  - Recently Ended
+- Reusable `PartyCard` component showing:
+  - Party name and show title
+  - Current episode number
+  - Status badge (LIVE / UPCOMING / ENDED)
+  - Countdown timer for upcoming parties
+  - Join Party button
+- Live parties visually highlighted with red border
+- All parties fetched and categorized using existing `partyStatus` utility
+- "+ Create" button in the home page header
+- Global empty state when no parties exist
+
+### Key decisions
+
+- Used server-side rendering on the home page for fast initial load
+- Reused `calculatePartyStatus` utility to keep status logic consistent
+- Recently Ended section only shown if ended parties exist
+- Empty state includes a direct CTA to create a party
+
+### Result
+
+New users land on a structured home page showing all available parties categorized by status. They can immediately see what is live, what is coming up, and join any party with one click.
+
+---
+
+## Up Next — Milestone 9
 
 TBD

@@ -8,11 +8,14 @@ Users watch on external platforms (Netflix, Crunchyroll, etc). WatchParty provid
 
 ## What it does
 
-- Create a watch party around a show
-- Invite others to join the party
+- Browse live, upcoming and ended watch parties on the home page
+- Create a watch party around a show with a schedule and watch link
 - Browse episodes together
 - Post reactions tied to your watch progress
 - Spoiler filtering hides reactions from ahead of where you are
+- Party chat for general conversation during a watch event
+- Live status indicator and countdown timer
+- PiP-friendly layout for watching alongside the app
 
 ---
 
@@ -71,35 +74,48 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 ```
 app/
 ├── api/
-│   ├── parties/          # Party creation API
+│   ├── parties/                    # Party creation and messages API
+│   │   └── [partyId]/
+│   │       └── messages/           # Party chat API
 │   └── episodes/
 │       └── [episodeSessionId]/
-│           ├── posts/     # Reactions API
-│           └── progress/  # User progress API
-├── create-party/          # Create party page
+│           ├── posts/              # Reactions API
+│           └── progress/           # User progress API
+├── components/
+│   └── PartyCard.tsx               # Reusable party card
+├── create-party/                   # Create party page
 └── parties/
     └── [partyId]/
-        ├── page.tsx       # Party detail page
+        ├── page.tsx                # Party detail page
+        ├── PartyChat.tsx           # Chat component
+        ├── EpisodeDropdown.tsx     # Episode selector
         └── episodes/
             └── [episodeNumber]/
-                └── page.tsx  # Episode discussion page
+                ├── page.tsx        # Episode discussion page
+                └── EpisodeClient.tsx
 lib/
-└── prisma.ts              # Prisma client
+├── prisma.ts                       # Prisma client
+└── partyStatus.ts                  # Status calculation utility
 prisma/
-├── schema.prisma          # Database models
-└── seed.ts                # Seed data
+├── schema.prisma                   # Database models
+└── seed.ts                         # Seed data
 ```
 
 ---
 
-## Current Milestones
+## Milestones
 
-| Milestone | Status     | Description                                     |
-| --------- | ---------- | ----------------------------------------------- |
-| 1         | ✅ Done    | Party creation, database, party page            |
-| 2         | ✅ Done    | Episodes, episode list, current episode control |
-| 3         | ✅ Done    | Reactions, progress tracking, spoiler filtering |
-| 4         | 🔜 Planned | TBD                                             |
+| Milestone | Status     | Description                                               |
+| --------- | ---------- | --------------------------------------------------------- |
+| 1         | ✅ Done    | Party creation, database, party page                      |
+| 2         | ✅ Done    | Episodes, episode list, current episode control           |
+| 3         | ✅ Done    | Reactions, progress tracking, spoiler filtering           |
+| 4         | ✅ Done    | Username persistence, progress auto-load, UX improvements |
+| 5         | ✅ Done    | Scheduling, live status, watch link                       |
+| 6         | ✅ Done    | Party chat, messages API                                  |
+| 7         | ✅ Done    | Chat polling, live label, PiP-friendly layout             |
+| 8         | ✅ Done    | Home page redesign, party discovery, PartyCard            |
+| 9         | 🔜 Planned | TBD                                                       |
 
 ---
 
@@ -109,6 +125,7 @@ prisma/
 - **EpisodeSession** — an episode within a party
 - **Post** — a reaction posted at a specific timestamp
 - **UserProgress** — tracks how far a user has watched
+- **PartyMessage** — a chat message in a party
 
 ---
 
