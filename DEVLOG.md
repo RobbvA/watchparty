@@ -233,6 +233,37 @@ New users land on a structured home page showing all available parties categoriz
 
 ---
 
-## Up Next — Milestone 9
+## Milestone 9 — Presence and Live Momentum
+
+**Goal:** Strengthen the live watch party feeling by improving presence and join momentum.
+
+### What was built
+
+- Watching now count calculated from unique usernames active in chat or episode reactions in the last 10 minutes
+- Watching now indicator on the party page with green pulsing dot
+- Explanation text: "Active in chat or episode reactions recently"
+- Improved live header:
+  - Red background when party is live
+  - LIVE NOW badge with pulsing dot
+  - Current episode shown in header
+  - Watching now count inline in header
+  - Watch Now button
+- Current episode emphasis in episode list:
+  - "▶ Watching now" label above current episode
+  - "NOW" badge inside current episode card
+
+### Key decisions
+
+- Watching now count uses server-side query at render time — no realtime infrastructure needed
+- Combined chat messages and episode reactions for a more accurate presence signal
+- Current episode made visually obvious so users immediately know where to go
+
+### Result
+
+The party page now clearly communicates that a watch event is happening, who is there, and what episode to watch. Users feel the live momentum without any realtime infrastructure.
+
+---
+
+## Up Next — Milestone 10
 
 TBD
