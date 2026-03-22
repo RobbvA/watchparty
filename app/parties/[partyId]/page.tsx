@@ -118,22 +118,38 @@ export default async function PartyPage({
             Episodes
           </h2>
           <ul className="flex flex-col gap-1">
-            {party.episodes.map((ep) => (
-              <li key={ep.id}>
-                <Link
-                  href={`/parties/${partyId}/episodes/${ep.episodeNumber}`}
-                  className={`block px-3 py-2 rounded-lg border text-sm ${
-                    ep.episodeNumber === party.currentEpisodeNumber
-                      ? "bg-black text-white font-bold"
-                      : "bg-white text-gray-800 hover:bg-gray-100"
-                  }`}
-                >
-                  Ep {ep.episodeNumber}
-                  {ep.episodeTitle && ` — ${ep.episodeTitle}`}
-                  {ep.episodeNumber === party.currentEpisodeNumber && " 👈"}
-                </Link>
-              </li>
-            ))}
+            {party.episodes.map((ep) => {
+              const isCurrent = ep.episodeNumber === party.currentEpisodeNumber;
+              return (
+                <li key={ep.id}>
+                  {isCurrent && (
+                    <p className="text-xs font-bold text-green-600 uppercase tracking-wide mb-1 ml-1">
+                      ▶ Watching now
+                    </p>
+                  )}
+                  <Link
+                    href={`/parties/${partyId}/episodes/${ep.episodeNumber}`}
+                    className={`block px-3 py-2 rounded-lg border text-sm ${
+                      isCurrent
+                        ? "bg-black text-white font-bold border-black"
+                        : "bg-white text-gray-800 hover:bg-gray-100"
+                    }`}
+                  >
+                    <span className="flex items-center justify-between">
+                      <span>
+                        Ep {ep.episodeNumber}
+                        {ep.episodeTitle && ` — ${ep.episodeTitle}`}
+                      </span>
+                      {isCurrent && (
+                        <span className="text-xs bg-white text-black px-2 py-0.5 rounded-full font-bold">
+                          NOW
+                        </span>
+                      )}
+                    </span>
+                  </Link>
+                </li>
+              );
+            })}
           </ul>
         </section>
 
