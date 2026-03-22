@@ -24,6 +24,25 @@ export default async function PartyPage({
   );
   const timeUntil = getTimeUntil(party.scheduledAt);
 
+  const recentMinutes = 10;
+  const since = new Date(Date.now() - recentMinutes * 60 * 1000);
+
+  const [recentMessages, recentPosts] = await Promise.all([
+    prisma.partyMessage.findMany({
+      where: { partyId, createdAt: { gte: since } },
+      select: { username: true },
+    }),
+    prisma.post.findMany({
+      where: { partyId, createdAt: { gte: since } },
+      select: { username: true },
+    }),
+  ]);
+
+  const watchingNow = new Set([
+    ...recentMessages.map((m) => m.username),
+    ...recentPosts.map((p) => p.username),
+  ]).size;
+
   return (
     <main className="min-h-screen bg-gray-50">
       {/* Compact header */}
