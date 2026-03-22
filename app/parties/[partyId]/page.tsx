@@ -25,7 +25,7 @@ export default async function PartyPage({
   const timeUntil = getTimeUntil(party.scheduledAt);
 
   const recentMinutes = 10;
-  const since = new Date(Date.now() - recentMinutes * 60 * 1000);
+  const since = new Date(new Date().getTime() - recentMinutes * 60 * 1000);
 
   const [recentMessages, recentPosts] = await Promise.all([
     prisma.partyMessage.findMany({
