@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import Link from "next/link";
 import { calculatePartyStatus } from "@/lib/partyStatus";
+import PartyCard from "./components/PartyCard";
 
 export default async function Home() {
   const parties = await prisma.party.findMany({
@@ -29,12 +30,27 @@ export default async function Home() {
         </p>
       </div>
 
-      <div className="max-w-lg mx-auto px-6 py-6">
-        <p className="text-sm text-gray-500">Live: {liveParties.length}</p>
-        <p className="text-sm text-gray-500">
-          Upcoming: {upcomingParties.length}
-        </p>
-        <p className="text-sm text-gray-500">Ended: {endedParties.length}</p>
+      <div className="max-w-lg mx-auto px-6 py-6 flex flex-col gap-8">
+        {/* Live Now */}
+        <section>
+          <div className="flex items-center gap-2 mb-3">
+            <span className="w-2 h-2 bg-red-500 rounded-full animate-pulse" />
+            <h2 className="text-sm font-bold text-red-600 uppercase tracking-wide">
+              Live Now
+            </h2>
+          </div>
+          {liveParties.length === 0 ? (
+            <p className="text-sm text-gray-400">No live parties right now.</p>
+          ) : (
+            <ul className="flex flex-col gap-3">
+              {liveParties.map((p) => (
+                <li key={p.id}>
+                  <PartyCard party={p} />
+                </li>
+              ))}
+            </ul>
+          )}
+        </section>
       </div>
     </main>
   );
