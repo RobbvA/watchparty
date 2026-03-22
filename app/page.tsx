@@ -1,16 +1,23 @@
+import { prisma } from "@/lib/prisma";
 import Link from "next/link";
 
-export default function Home() {
+export default async function Home() {
+  const parties = await prisma.party.findMany({
+    orderBy: { createdAt: "desc" },
+  });
+
   return (
-    <main className="min-h-screen p-8">
-      <h1 className="text-3xl font-bold">WatchParty</h1>
-      <p className="mt-2 text-gray-500">Your social watching companion.</p>
-      <Link
-        href="/create-party"
-        className="mt-6 inline-block bg-black text-white px-4 py-2 rounded"
-      >
-        Create a Party
-      </Link>
+    <main className="min-h-screen bg-gray-50">
+      <div className="bg-white border-b px-6 py-4">
+        <h1 className="text-2xl font-bold">WatchParty</h1>
+        <p className="text-sm text-gray-500 mt-1">
+          Your social watching companion.
+        </p>
+      </div>
+
+      <div className="max-w-lg mx-auto px-6 py-6">
+        <p className="text-sm text-gray-500">Found {parties.length} parties.</p>
+      </div>
     </main>
   );
 }
