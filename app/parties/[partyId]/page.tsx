@@ -121,7 +121,7 @@ export default async function PartyPage({
 
         {/* Episode list */}
         <section>
-          <h2 className="text-xs font-bold text-gray-500 uppercase tracking-wide mb-2">
+          <h2 className="mb-2 text-xs font-medium uppercase tracking-wide text-muted">
             Episodes
           </h2>
           <ul className="flex flex-col gap-1">
@@ -162,7 +162,7 @@ export default async function PartyPage({
 
         {/* Host controls */}
         <section className="bg-white rounded-lg border p-3">
-          <h2 className="text-xs font-bold text-gray-500 uppercase tracking-wide mb-2">
+          <h2 className="mb-2 text-xs font-medium uppercase tracking-wide text-muted">
             Host Controls
           </h2>
           <EpisodeDropdown
@@ -174,7 +174,7 @@ export default async function PartyPage({
 
         {/* Party info - collapsed to bottom */}
         <section className="bg-white rounded-lg border p-3">
-          <h2 className="text-xs font-bold text-gray-500 uppercase tracking-wide mb-2">
+          <h2 className="mb-2 text-xs font-medium uppercase tracking-wide text-muted">
             Party Info
           </h2>
           <div className="flex flex-col gap-1 text-sm text-gray-600">
