@@ -102,15 +102,15 @@ export default async function PartyPage({
       <div className="mx-auto flex max-w-lg flex-col gap-4 px-4 py-6">
         {/* Watching now + recent activity */}
         {watchingNow > 0 && (
-          <div className="bg-white rounded-lg border px-4 py-3 flex flex-col gap-1">
+          <div className="surface-elevated flex flex-col gap-2 px-4 py-4">
             <div className="flex items-center gap-2">
-              <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
-              <p className="text-sm font-semibold text-gray-700">
+              <span className="h-2 w-2 rounded-full bg-status-active animate-pulse" />
+              <p className="text-sm font-semibold text-text-primary">
                 {watchingNow} {watchingNow === 1 ? "person" : "people"} watching
                 now
               </p>
             </div>
-            <p className="text-xs text-gray-400 ml-4">
+            <p className="ml-4 text-sm text-muted">
               Active in chat or episode reactions recently
             </p>
           </div>
