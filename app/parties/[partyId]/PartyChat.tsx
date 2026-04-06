@@ -83,45 +83,54 @@ export default function PartyChat({
   }
 
   return (
-    <section className="bg-white rounded-lg border p-4 flex flex-col gap-3">
+    <section className="surface-elevated flex flex-col gap-4 p-4">
       {isLive ? (
         <div className="flex items-center gap-2">
-          <span className="w-2 h-2 bg-red-500 rounded-full animate-pulse" />
-          <h2 className="text-sm font-bold text-red-600">Live Party Chat</h2>
+          <span className="h-2 w-2 rounded-full bg-status-live animate-pulse" />
+          <h2 className="text-sm font-semibold text-text-primary">
+            Live Party Chat
+          </h2>
         </div>
       ) : (
-        <h2 className="text-sm font-bold text-gray-700">Party Chat</h2>
+        <h2 className="text-sm font-semibold text-text-primary">Party Chat</h2>
       )}
 
       {activeUsers > 0 && (
-        <p className="text-xs text-gray-400">
+        <p className="text-sm text-muted">
           {activeUsers} {activeUsers === 1 ? "person" : "people"} active
           recently
         </p>
       )}
 
       <input
-        className="border p-2 rounded text-sm w-full"
+        className="w-full rounded-[14px] border border-white/10 bg-white/5 px-3 py-2.5 text-sm text-text-primary outline-none placeholder:text-muted focus:border-accent/40 focus:bg-white/10"
         placeholder="Your username"
         value={username}
         onChange={(e) => handleUsernameChange(e.target.value)}
       />
 
-      <div className="flex flex-col gap-2 max-h-64 overflow-y-auto border rounded p-2 bg-gray-50">
+      <div className="flex max-h-72 flex-col gap-3 overflow-y-auto rounded-[16px] border border-white/10 bg-black/10 px-3 py-3">
         {messages.length === 0 ? (
-          <p className="text-xs text-gray-400 text-center py-4">
+          <p className="py-6 text-center text-sm text-muted">
             No messages yet. Say hello!
           </p>
         ) : (
           messages.map((msg) => (
-            <div key={msg.id} className="text-sm">
-              <span className="font-semibold text-gray-700">
-                {msg.username}
-              </span>
-              <span className="text-gray-400 text-xs ml-2">
-                {new Date(msg.createdAt).toLocaleTimeString()}
-              </span>
-              <p className="text-gray-800">{msg.body}</p>
+            <div
+              key={msg.id}
+              className="rounded-[14px] border border-white/8 bg-white/5 px-3 py-2.5"
+            >
+              <div className="flex items-center gap-2">
+                <span className="text-sm font-medium text-text-primary">
+                  {msg.username}
+                </span>
+                <span className="text-xs text-muted">
+                  {new Date(msg.createdAt).toLocaleTimeString()}
+                </span>
+              </div>
+              <p className="mt-1 text-sm leading-6 text-secondary">
+                {msg.body}
+              </p>
             </div>
           ))
         )}
@@ -130,7 +139,7 @@ export default function PartyChat({
 
       <div className="flex gap-2">
         <input
-          className="border p-2 rounded text-sm flex-1"
+          className="flex-1 rounded-[14px] border border-white/10 bg-white/5 px-3 py-2.5 text-sm text-text-primary outline-none placeholder:text-muted focus:border-accent/40 focus:bg-white/10"
           placeholder="Type a message..."
           value={body}
           onChange={(e) => setBody(e.target.value)}
@@ -139,14 +148,16 @@ export default function PartyChat({
         <button
           onClick={handleSend}
           disabled={status === "sending"}
-          className="bg-black text-white px-4 py-2 rounded text-sm font-semibold disabled:opacity-50"
+          className="inline-flex items-center justify-center rounded-[14px] border border-accent/30 bg-accent px-4 py-2 text-sm font-semibold text-slate-950 shadow-[0_0_24px_rgba(139,156,255,0.18)] transition hover:bg-accent-strong disabled:opacity-50"
         >
           {status === "sending" ? "..." : "Send"}
         </button>
       </div>
 
       {status === "error" && (
-        <p className="text-xs text-red-500">Something went wrong. Try again.</p>
+        <p className="text-sm text-status-live">
+          Something went wrong. Try again.
+        </p>
       )}
     </section>
   );
