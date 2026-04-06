@@ -46,12 +46,12 @@ export default async function PartyPage({
   return (
     <main className="app-shell">
       {/* Header */}
-      <div className="px-4 py-4 border-b border-white/10 bg-transparent">
+      <div className="border-b border-white/10 bg-transparent px-4 py-4">
         <Link href="/" className="text-sm text-muted hover:text-text-secondary">
           ← Home
         </Link>
 
-        <div className="flex items-start justify-between mt-1">
+        <div className="mt-2 flex items-start justify-between gap-4">
           <div className="space-y-1">
             <h1 className="text-2xl font-semibold tracking-tight text-text-primary">
               {party.name}
@@ -71,12 +71,15 @@ export default async function PartyPage({
                 </span>
               </div>
             )}
+
             {status === "upcoming" && timeUntil && (
               <span className="text-sm text-secondary">🕐 {timeUntil}</span>
             )}
+
             {status === "ended" && (
               <span className="text-sm text-muted">✅ Ended</span>
             )}
+
             {watchingNow > 0 && (
               <div className="flex items-center gap-2">
                 <span className="h-2 w-2 rounded-full bg-status-active animate-pulse" />
@@ -85,6 +88,7 @@ export default async function PartyPage({
                 </span>
               </div>
             )}
+
             {party.watchLink && (
               <a
                 href={party.watchLink}
@@ -99,7 +103,7 @@ export default async function PartyPage({
         </div>
       </div>
 
-      <div className="mx-auto flex max-w-lg flex-col gap-4 px-4 py-6">
+      <div className="mx-auto flex max-w-lg flex-col gap-5 px-4 py-6">
         {/* Watching now + recent activity */}
         {watchingNow > 0 && (
           <div className="surface-elevated flex flex-col gap-2 px-4 py-4">
@@ -117,16 +121,23 @@ export default async function PartyPage({
         )}
 
         {/* Chat first - most important during live watch */}
-        <PartyChat partyId={partyId} isLive={status === "live"} />
+        <section className="space-y-2">
+          <h2 className="text-sm font-medium tracking-tight text-text-secondary">
+            Live chat
+          </h2>
+          <PartyChat partyId={partyId} isLive={status === "live"} />
+        </section>
 
         {/* Episode list */}
-        <section>
-          <h2 className="mb-2 text-xs font-medium uppercase tracking-wide text-muted">
+        <section className="space-y-2">
+          <h2 className="text-sm font-medium tracking-tight text-text-secondary">
             Episodes
           </h2>
-          <ul className="flex flex-col gap-1">
+
+          <ul className="flex flex-col gap-2">
             {party.episodes.map((ep) => {
               const isCurrent = ep.episodeNumber === party.currentEpisodeNumber;
+
               return (
                 <li key={ep.id}>
                   {isCurrent && (
@@ -134,21 +145,23 @@ export default async function PartyPage({
                       ▶ Watching now
                     </p>
                   )}
+
                   <Link
                     href={`/parties/${partyId}/episodes/${ep.episodeNumber}`}
-                    className={`block rounded-[14px] border px-3 py-2 text-sm transition ${
+                    className={`block rounded-[14px] border px-3 py-3 text-sm transition ${
                       isCurrent
                         ? "border-accent/40 bg-accent/10 text-text-primary"
                         : "border-white/10 bg-white/5 text-secondary hover:bg-white/10"
                     }`}
                   >
-                    <span className="flex items-center justify-between">
-                      <span>
+                    <span className="flex items-center justify-between gap-3">
+                      <span className="min-w-0">
                         Ep {ep.episodeNumber}
                         {ep.episodeTitle && ` — ${ep.episodeTitle}`}
                       </span>
+
                       {isCurrent && (
-                        <span className="rounded-full border border-accent/30 bg-accent/20 px-2 py-0.5 text-xs font-medium text-accent">
+                        <span className="shrink-0 rounded-full border border-accent/30 bg-accent/20 px-2 py-0.5 text-xs font-medium text-accent">
                           NOW
                         </span>
                       )}
@@ -161,10 +174,15 @@ export default async function PartyPage({
         </section>
 
         {/* Host controls */}
-        <section className="bg-white rounded-lg border p-3">
-          <h2 className="mb-2 text-xs font-medium uppercase tracking-wide text-muted">
-            Host Controls
+        <section className="surface flex flex-col gap-3 p-4">
+          <h2 className="text-sm font-medium tracking-tight text-text-secondary">
+            Host controls
           </h2>
+
+          <div className="text-sm text-muted">
+            Change which episode the party is currently watching.
+          </div>
+
           <EpisodeDropdown
             partyId={partyId}
             episodes={party.episodes}
@@ -172,18 +190,23 @@ export default async function PartyPage({
           />
         </section>
 
-        {/* Party info - collapsed to bottom */}
-        <section className="bg-white rounded-lg border p-3">
-          <h2 className="mb-2 text-xs font-medium uppercase tracking-wide text-muted">
-            Party Info
+        {/* Party info */}
+        <section className="surface flex flex-col gap-3 p-4">
+          <h2 className="text-sm font-medium tracking-tight text-text-secondary">
+            Party info
           </h2>
-          <div className="flex flex-col gap-1 text-sm text-gray-600">
+
+          <div className="flex flex-col gap-2 text-sm text-secondary">
             <p>
-              <span className="font-semibold">Host:</span> {party.hostUsername}
+              <span className="text-text-primary font-medium">Host:</span>{" "}
+              {party.hostUsername}
             </p>
+
             {party.scheduledAt && (
               <p>
-                <span className="font-semibold">Scheduled:</span>{" "}
+                <span className="text-text-primary font-medium">
+                  Scheduled:
+                </span>{" "}
                 {new Date(party.scheduledAt).toLocaleString()}
               </p>
             )}
