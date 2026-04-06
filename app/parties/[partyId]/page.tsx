@@ -44,41 +44,43 @@ export default async function PartyPage({
   ]).size;
 
   return (
-    <main className="min-h-screen bg-gray-50">
+    <main className="app-shell">
       {/* Header */}
-      <div
-        className={`border-b px-4 py-4 ${status === "live" ? "bg-red-50" : "bg-white"}`}
-      >
-        <Link href="/" className="text-xs text-gray-400 hover:text-gray-600">
+      <div className="px-4 py-4 border-b border-white/10 bg-transparent">
+        <Link href="/" className="text-sm text-muted hover:text-text-secondary">
           ← Home
         </Link>
 
         <div className="flex items-start justify-between mt-1">
-          <div>
-            <h1 className="text-lg font-bold leading-tight">{party.name}</h1>
-            <p className="text-xs text-gray-500">{party.showTitle}</p>
-            <p className="text-xs text-gray-400 mt-0.5">
+          <div className="space-y-1">
+            <h1 className="text-2xl font-semibold tracking-tight text-text-primary">
+              {party.name}
+            </h1>
+            <p className="text-sm text-secondary">{party.showTitle}</p>
+            <p className="text-sm text-muted">
               Now watching: Episode {party.currentEpisodeNumber}
             </p>
           </div>
 
-          <div className="flex flex-col items-end gap-2">
+          <div className="flex flex-col items-end gap-2 text-right">
             {status === "live" && (
-              <div className="flex items-center gap-1">
-                <span className="w-2 h-2 bg-red-500 rounded-full animate-pulse" />
-                <span className="text-xs font-bold text-red-600">LIVE NOW</span>
+              <div className="flex items-center gap-2">
+                <span className="h-2 w-2 rounded-full bg-status-live animate-pulse" />
+                <span className="rounded-full border border-white/10 bg-white/5 px-2.5 py-1 text-xs font-medium text-status-live">
+                  LIVE NOW
+                </span>
               </div>
             )}
             {status === "upcoming" && timeUntil && (
-              <span className="text-xs text-gray-500">🕐 {timeUntil}</span>
+              <span className="text-sm text-secondary">🕐 {timeUntil}</span>
             )}
             {status === "ended" && (
-              <span className="text-xs text-gray-400">✅ Ended</span>
+              <span className="text-sm text-muted">✅ Ended</span>
             )}
             {watchingNow > 0 && (
-              <div className="flex items-center gap-1">
-                <span className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse" />
-                <span className="text-xs text-green-600 font-semibold">
+              <div className="flex items-center gap-2">
+                <span className="h-2 w-2 rounded-full bg-status-active animate-pulse" />
+                <span className="text-sm font-medium text-secondary">
                   {watchingNow} watching
                 </span>
               </div>
@@ -88,7 +90,7 @@ export default async function PartyPage({
                 href={party.watchLink}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-xs bg-black text-white px-3 py-1.5 rounded font-semibold"
+                className="inline-flex items-center justify-center rounded-[14px] border border-accent/30 bg-accent px-4 py-2 text-sm font-semibold text-slate-950 shadow-[0_0_24px_rgba(139,156,255,0.22)] transition hover:bg-accent-strong"
               >
                 Watch Now →
               </a>
@@ -97,7 +99,7 @@ export default async function PartyPage({
         </div>
       </div>
 
-      <div className="max-w-lg mx-auto px-4 py-4 flex flex-col gap-4">
+      <div className="mx-auto flex max-w-lg flex-col gap-4 px-4 py-6">
         {/* Watching now + recent activity */}
         {watchingNow > 0 && (
           <div className="bg-white rounded-lg border px-4 py-3 flex flex-col gap-1">
