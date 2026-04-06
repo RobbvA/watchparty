@@ -130,16 +130,16 @@ export default async function PartyPage({
               return (
                 <li key={ep.id}>
                   {isCurrent && (
-                    <p className="text-xs font-bold text-green-600 uppercase tracking-wide mb-1 ml-1">
+                    <p className="mb-1 ml-1 text-xs font-medium uppercase tracking-wide text-accent">
                       ▶ Watching now
                     </p>
                   )}
                   <Link
                     href={`/parties/${partyId}/episodes/${ep.episodeNumber}`}
-                    className={`block px-3 py-2 rounded-lg border text-sm ${
+                    className={`block rounded-[14px] border px-3 py-2 text-sm transition ${
                       isCurrent
-                        ? "bg-black text-white font-bold border-black"
-                        : "bg-white text-gray-800 hover:bg-gray-100"
+                        ? "border-accent/40 bg-accent/10 text-text-primary"
+                        : "border-white/10 bg-white/5 text-secondary hover:bg-white/10"
                     }`}
                   >
                     <span className="flex items-center justify-between">
@@ -148,7 +148,7 @@ export default async function PartyPage({
                         {ep.episodeTitle && ` — ${ep.episodeTitle}`}
                       </span>
                       {isCurrent && (
-                        <span className="text-xs bg-white text-black px-2 py-0.5 rounded-full font-bold">
+                        <span className="rounded-full border border-accent/30 bg-accent/20 px-2 py-0.5 text-xs font-medium text-accent">
                           NOW
                         </span>
                       )}
